@@ -1,7 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import Emoji from './Emoji';
 import styled from 'styled-components';
-import { EmojisContext } from '../context/EmojiContext';
 import { Context } from './Store';
 const EmojisWrapper = styled.ul`
   list-style-type: none;

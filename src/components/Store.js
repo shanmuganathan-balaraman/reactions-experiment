@@ -21,7 +21,10 @@ const initialState = {
   }],
   emojis: [],
   reactions: [],
-  showEmojis: false,
+  showEmoji: {
+    id: 0,
+    show: false
+  },
   currentUser: 4
 };
 

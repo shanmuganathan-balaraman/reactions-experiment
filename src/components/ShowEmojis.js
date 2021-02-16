@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useState, useContext } from 'react';
 import styled from 'styled-components';
 import IcomoonReact from "icomoon-react";
 import iconSet from "../assets/icons/selection.json";
@@ -19,15 +19,14 @@ const ShowReactions = styled.button`
 
 const ShowEmojis = ({ postId }) => {
   const [state, dispatch] = useContext(Context);
-
   const handleClick = (event) => {
-    console.log(!state.showEmojis);
-    dispatch({ type: 'TOGGLE_EMOJIS', payload: !state.showEmojis });
+    console.log(state.showEmoji);
+    dispatch({ type: 'TOGGLE_EMOJIS', payload: { id: event.currentTarget.dataset.postid, show: !state.showEmojis } });
   };
   return (
     <>
-      {state.showEmojis ? <EmojiWrapper postId={postId} /> : ''}
-      <ShowReactions onClick={handleClick} onKeyPress={handleClick}>
+      {state.showEmoji.show && state.showEmoji.id == postId ? <EmojiWrapper postId={postId} /> : ''}
+      <ShowReactions onClick={handleClick} onKeyPress={handleClick} data-postid={postId}>
         <IcomoonReact iconSet={iconSet} color="#000" size={20} icon="insert_emoticon" />
       </ShowReactions>
     </>

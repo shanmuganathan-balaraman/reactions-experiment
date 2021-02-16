@@ -39,7 +39,7 @@ const Reducer = (state, action) => {
       console.log(action.payload);
       return {
         ...state,
-        showEmojis: action.payload
+        showEmoji: action.payload
       };
     case 'SET_ERROR':
       return {

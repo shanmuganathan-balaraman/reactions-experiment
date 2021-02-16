@@ -58,6 +58,7 @@ const Summary = ({ activeEl, postId, reactionsData, reactionsDataGrouped }) => {
   const [state, dispatch] = useContext(Context);
   const [activeTab, setActiveTab] = useState(activeEl)
   const handleTabNav = (e) => {
+    e.stopPropagation();
     setActiveTab(e.target.dataset.target);
   }
   return (
