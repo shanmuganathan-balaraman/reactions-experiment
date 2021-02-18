@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import Summary from './Summary';
 import { groupBy } from '../Utils';
-import { Context } from './Store';
+import { Context } from '../store/Store';
 
 const Wrapper = styled.ul`
   list-style-type:none;
@@ -14,14 +14,18 @@ const Wrapper = styled.ul`
 const Reaction = styled.li`
   border-radius: 1.5rem;
   width: auto;
-  border: 1px solid #e0e0e0;
+  border: 1px solid ${props => props.theme.secondaryBorder};
   padding: 0 0.5rem;
   margin-right: 0.5rem;
-  background-color: #fff;
+  background-color: ${props => props.theme.primaryBg};
   &.current-user {
-    border: 1px solid #0f62fe;
-    background-color: #edf5ff;
+    border: 1px solid ${props => props.theme.accentBorder};
+    background-color: ${props => props.theme.accentBg};
   }
+`
+const LoadingText = styled.span`
+  padding:0.3rem 0;
+  display:inline-block;
 `
 const Emoji = styled.span`
   line-height: 30px;
@@ -76,36 +80,34 @@ const Reactions = ({ postId }) => {
   if (error) {
     return (
       <Wrapper>
-        <Reaction>Error: {error.message}</Reaction>
+        <Reaction><LoadingText>Error: {error.message}</LoadingText></Reaction>
       </Wrapper>
     );
   } else if (!isLoaded) {
     return (
       <Wrapper>
-        <Reaction>Loading...</Reaction>
+        <Reaction><LoadingText>Loading...</LoadingText></Reaction>
       </Wrapper>
     );
   } else {
     const filtered = state.reactions.filter(reaction => reaction.content_id == postId);
     const groupedReactions = groupBy(filtered, 'reaction_id');
-    // console.log(state.currentUser);
     return (
-      <>
-        <Wrapper>
-          {Object.keys(groupedReactions).map(key => {
-            let getEmoji = state.emojis.find(o => o.id == key);
-            const currentUserReactedList = groupedReactions[key].filter(o => o.user_id == state.currentUser);
-            const currentUserReacted = currentUserReactedList.length > 0;
-            return (
-              <Reaction key={key} data-emoji={key} data-reaction={currentUserReacted ? currentUserReactedList[0].id : ''} onMouseEnter={(e) => toggleSummary(true, e)} onMouseLeave={(e) => toggleSummary(false, e)} onClick={clickHandler} className={currentUserReacted ? 'current-user' : ''} >
-                <Emoji>{getEmoji.emoji}</Emoji>
-                <Count>{groupedReactions[key].length}</Count>
-                {showSummary && (currentlyHovering === key) ? <Summary activeEl={activeTab} postId={postId} reactionsData={filtered} reactionsDataGrouped={groupedReactions} /> : ''}
-              </Reaction>
-            )
-          })}
-        </Wrapper>
-      </>
+      <Wrapper>
+        {Object.keys(groupedReactions).map(key => {
+          let getEmoji = state.emojis.find(o => o.id == key);
+          const currentUserReactedList = groupedReactions[key].filter(o => o.user_id == state.currentUser);
+          const currentUserReacted = currentUserReactedList.length > 0;
+          return (
+            <Reaction key={key} data-emoji={key} data-reaction={currentUserReacted ? currentUserReactedList[0].id : ''} onMouseEnter={(e) => toggleSummary(true, e)} onMouseLeave={(e) => toggleSummary(false, e)} onClick={clickHandler} className={currentUserReacted ? 'current-user' : ''} >
+              <Emoji>{getEmoji.emoji}</Emoji>
+              <Count>{groupedReactions[key].length}</Count>
+              {showSummary && (currentlyHovering === key) ? <Summary activeEl={activeTab} reactionsData={filtered} reactionsDataGrouped={groupedReactions} /> : ''}
+            </Reaction>
+          )
+        })}
+      </Wrapper>
+
     )
   }
 }

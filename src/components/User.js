@@ -1,7 +1,8 @@
 import { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { findItemByVal } from '../Utils';
-import { Context } from './Store';
+import { Context } from '../store/Store';
+import UserShimmer from './shimmers/UserShimmer';
 
 const User = styled.li`
   width: auto;
@@ -11,7 +12,7 @@ const User = styled.li`
   align-items:center;
 `
 const Emoji = styled.span`
-  line-height: 30px;
+  line-height:.9;
   margin-right: 0.5rem; 
 `
 const Avatar = styled.img`
@@ -23,31 +24,6 @@ const Avatar = styled.img`
 `
 const UserName = styled.span`
   
-`
-
-const Loading = styled.li`
-  margin: 0 0.5rem 1rem 0;
-  display: flex;
-  align-items:center;
-`
-const AvatarLoader = styled.div`
-  width: 2rem;
-  height: 2rem;
-  background-color: #e0e0e0;
-  border-radius: 50%;
-  margin-right: 0.5rem;
-`
-const EmojiLoader = styled.span`
-  width: 1rem;
-  height: 1rem;
-  background-color: #e0e0e0;
-  margin-right: 0.5rem;
-  border-radius: 50%;
-`
-const UsernameLoader = styled.span`
-  width: 10rem;
-  height: 1rem;
-  background-color: #e0e0e0;
 `
 
 const Detail = ({ userId, emojiId }) => {
@@ -74,11 +50,7 @@ const Detail = ({ userId, emojiId }) => {
     return (<User>Error: {error.message}</User>);
   } else if (!isLoaded) {
     return (
-      <Loading>
-        <AvatarLoader className='animate' />
-        <EmojiLoader className='animate' />
-        <UsernameLoader className='animate' />
-      </Loading>
+      <UserShimmer />
     );
   } else {
     let getEmoji = findItemByVal(state.emojis, 'id', emojiId);

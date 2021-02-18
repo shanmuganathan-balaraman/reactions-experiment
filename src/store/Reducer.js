@@ -36,7 +36,6 @@ const Reducer = (state, action) => {
         emojis: action.payload
       };
     case 'TOGGLE_EMOJIS':
-      console.log(action.payload);
       return {
         ...state,
         showEmoji: action.payload

@@ -1,15 +1,16 @@
 import Posts from './components/Posts';
-import GlobalStyle from './components/globalStyle';
-import Store from './components/Store';
+import Store from './store/Store';
+import GlobalStyle from './theme/GlobalStyle';
+import DefaultTheme from './theme/DefaultTheme';
+import { ThemeProvider } from 'styled-components'
 const App = () => {
   return (
-    <div className="App">
+    <ThemeProvider theme={DefaultTheme}>
       <GlobalStyle />
       <Store>
         <Posts />
       </Store>
-    </div>
+    </ThemeProvider>
   )
 }
-
 export default App;

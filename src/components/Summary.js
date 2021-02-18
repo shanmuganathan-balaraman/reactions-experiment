@@ -1,13 +1,14 @@
 import { useState, useContext } from 'react';
 import styled from 'styled-components';
 import ReactedUsers from './ReactedUsers';
-import { Context } from './Store';
+import { Context } from '../store/Store';
+import { findItemByVal } from '../Utils';
 const Wrapper = styled.section`
   width: auto;
   height: 300px;
   background-color: #fff;
   border: 1px solid #e0e0e0;
-  border-radius: 4px;
+  border-radius: 0.25rem;
   font-size: 14px;
   margin-top: 0.5rem;
   position: absolute;
@@ -33,7 +34,7 @@ const TabNav = styled.ul`
   box-sizing:border-box;
 `
 const TabNavItem = styled.li`
-  padding:0 16px;
+  padding:0 1rem;
   cursor: pointer;
   &.active {
     border-bottom: 1px solid #0f62fe;
@@ -54,7 +55,7 @@ padding: 1rem;
 }
 `
 
-const Summary = ({ activeEl, postId, reactionsData, reactionsDataGrouped }) => {
+const Summary = ({ activeEl, reactionsData, reactionsDataGrouped }) => {
   const [state, dispatch] = useContext(Context);
   const [activeTab, setActiveTab] = useState(activeEl)
   const handleTabNav = (e) => {
@@ -70,7 +71,7 @@ const Summary = ({ activeEl, postId, reactionsData, reactionsDataGrouped }) => {
             All {reactionsData.length}
           </TabNavItem>
           {Object.keys(reactionsDataGrouped).map(key => {
-            let getEmoji = state.emojis.find(o => o.id == key);
+            let getEmoji = findItemByVal(state.emojis, 'id', key);;
             return (
               <TabNavItem className={activeTab === key ? "active" : ''} data-target={key} onClick={handleTabNav}>
                 {getEmoji.emoji} <Count>{reactionsDataGrouped[key].length}</Count>

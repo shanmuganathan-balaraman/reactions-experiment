@@ -1,35 +1,34 @@
-import { useState, useContext } from 'react';
+import { useContext } from 'react';
 import styled from 'styled-components';
 import IcomoonReact from "icomoon-react";
 import iconSet from "../assets/icons/selection.json";
-import EmojiWrapper from './EmojiWrapper';
-import { Context } from './Store';
+import Emojis from './Emojis';
+import { Context } from '../store/Store';
+const Wrapper = styled.div`
+  position:relative;
+`
 const ShowReactions = styled.button`
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
-  border: 1px solid #e0e0e0;
+  border: 1px solid ${props => props.theme.secondaryBorder};
   text-align:center;
   padding:0;
-  background-color: #fff;
-  :focus {
-    outline: none;
-  }
+  background-color: ${props => props.theme.primaryBg};
 `
 
 const ShowEmojis = ({ postId }) => {
   const [state, dispatch] = useContext(Context);
   const handleClick = (event) => {
-    console.log(state.showEmoji);
-    dispatch({ type: 'TOGGLE_EMOJIS', payload: { id: event.currentTarget.dataset.postid, show: !state.showEmojis } });
+    dispatch({ type: 'TOGGLE_EMOJIS', payload: { id: event.currentTarget.dataset.postid, show: !state.showEmoji.show } });
   };
   return (
-    <>
-      {state.showEmoji.show && state.showEmoji.id == postId ? <EmojiWrapper postId={postId} /> : ''}
+    <Wrapper>
+      {state.showEmoji.show && state.showEmoji.id == postId ? <Emojis postId={postId} /> : ''}
       <ShowReactions onClick={handleClick} onKeyPress={handleClick} data-postid={postId}>
         <IcomoonReact iconSet={iconSet} color="#000" size={20} icon="insert_emoticon" />
       </ShowReactions>
-    </>
+    </Wrapper>
   )
 }
 export default ShowEmojis;
